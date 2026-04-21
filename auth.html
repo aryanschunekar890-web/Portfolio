@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BikeMaster | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .heading-font { font-family: 'Orbitron', sans-serif; }
+        .ultra-glass { background: rgba(10,10,10,0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-10">
+    <video autoplay muted loop class="absolute inset-0 w-full h-full object-cover opacity-40">
+        <source src="https://cdn.pixabay.com/video/2021/08/17/85304-588820120_large.mp4" type="video/mp4">
+    </video>
+    
+    <div class="relative z-10 max-w-md w-full">
+        <div class="text-center mb-12">
+            <h1 class="heading-font text-5xl mb-4">EKVIRA MOTORS</h1>
+            <div class="h-1 w-20 bg-yellow-400 mx-auto rounded-full"></div>
+        </div>
+        
+        <div class="ultra-glass rounded-3xl p-10 space-y-6">
+            <!-- Toggle Tabs -->
+            <div class="flex bg-white/5 rounded-2xl overflow-hidden">
+                <button id="login-tab" onclick="showTab('login')" class="flex-1 py-4 font-bold heading-font bg-yellow-400 text-black">Login</button>
+                <button id="reg-tab" onclick="showTab('register')" class="flex-1 py-4 font-bold border-t border-white/10">Register</button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="space-y-6">
+                <input type="email" id="l-email" placeholder="Email/Phone" required class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:border-yellow-400 outline-none">
+                <input type="password" id="l-pass" placeholder="Password" required class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:border-yellow-400 outline-none">
+                <button type="submit" class="w-full py-6 bg-yellow-400 text-black font-black heading-font rounded-2xl uppercase tracking-tighter hover:scale-[1.02]">Login</button>
+            </form>
+            
+            <!-- Register Form -->
+            <form id="reg-form" class="space-y-4 hidden">
+                <input type="text" id="r-name" placeholder="Full Name" required class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl">
+                <input type="email" id="r-email" placeholder="Email" required class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl">
+                <input type="tel" id="r-phone" placeholder="Phone (+91)" required class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl">
+                <input type="password" id="r-pass" placeholder="Password" required class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl">
+                <button type="submit" class="w-full py-6 bg-yellow-400 text-black font-black heading-font rounded-2xl uppercase tracking-tighter hover:scale-[1.02]">Create Account</button>
+            </form>
+        </div>
+        
+        <p class="text-center mt-8 text-gray-400">
+            <a href="index.html" class="text-yellow-400 hover:underline">← Back to Home</a>
+        </p>
+    </div>
+
+    <script>
+        gsap.from("form", { y: 50, opacity: 0, duration: 1, ease: "bounce.out" });
+        
+        function showTab(tab) {
+            document.getElementById('login-form').classList.toggle('hidden', tab !== 'login');
+            document.getElementById('reg-form').classList.toggle('hidden', tab !== 'register');
+            document.getElementById(tab + '-tab').classList.add('bg-yellow-400', 'text-black');
+            document.getElementById(tab === 'login' ? 'reg-tab' : 'login-tab').classList.remove('bg-yellow-400', 'text-black');
+        }
+        
+        // Login
+        document.getElementById('login-form').onsubmit = e => {
+            e.preventDefault();
+            const email = document.getElementById('l-email').value;
+            const pass = document.getElementById('l-pass').value;
+            sessionStorage.setItem('bmLoggedIn', 'true');
+            sessionStorage.setItem('bmUserName', email.split('@')[0]);
+            sessionStorage.setItem('bmUserEmail', email);
+            alert('Logged in! Redirecting...');
+            window.location.href = 'index.html';
+        };
+        
+        // Register (same as login but saves more data)
+        document.getElementById('reg-form').onsubmit = e => {
+            e.preventDefault();
+            sessionStorage.setItem('bmLoggedIn', 'true');
+            sessionStorage.setItem('bmUserName', document.getElementById('r-name').value);
+            sessionStorage.setItem('bmUserEmail', document.getElementById('r-email').value);
+            sessionStorage.setItem('bmUserPhone', document.getElementById('r-phone').value);
+            alert('Account created! Redirecting...');
+            window.location.href = 'index.html';
+        };
+    </script>
+</body>
+</html>

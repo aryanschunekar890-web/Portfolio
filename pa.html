@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BikePrime | Premium Motorcycle Parts</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --yellow:#facc15;
+  --yellow-dim:rgba(250,204,21,0.12);
+  --bg:#080808;
+  --bg2:#0f0f0f;
+  --bg3:#161616;
+  --border:rgba(255,255,255,0.07);
+  --text:#e8e8e8;
+  --muted:#666;
+  --font-display:'Barlow Condensed',sans-serif;
+  --font-body:'Barlow',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+
+/* ── NAVBAR ── */
+.navbar{position:fixed;top:0;left:0;width:100%;z-index:100;background:rgba(8,8,8,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;gap:1.5rem}
+.logo{font-family:var(--font-display);font-size:22px;font-weight:900;letter-spacing:-0.02em;white-space:nowrap}
+.logo .highlight{color:var(--yellow)}
+.search-container{flex:1;max-width:560px;position:relative}
+.search-container input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:14px;padding:10px 44px 10px 16px;border-radius:10px;outline:none;transition:border-color 0.2s}
+.search-container input:focus{border-color:var(--yellow)}
+.search-container input::placeholder{color:var(--muted)}
+.search-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);transition:color 0.2s;padding:4px}
+.search-btn:hover{color:var(--yellow)}
+.nav-links{display:flex;align-items:center;gap:1.5rem;margin-left:auto}
+.nav-links span{font-size:14px;color:var(--muted);cursor:pointer;transition:color 0.2s;white-space:nowrap}
+.nav-links span:hover{color:var(--text)}
+.cart-btn{display:flex;align-items:center;gap:6px;background:var(--yellow);color:#000;border:none;border-radius:8px;padding:8px 16px;font-family:var(--font-display);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;transition:transform 0.15s;position:relative}
+.cart-btn:hover{transform:scale(1.04)}
+.cart-count{background:#000;color:var(--yellow);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+
+/* ── HERO ── */
+.hero{margin-top:64px;position:relative;height:calc(100vh - 64px);min-height:500px;display:flex;align-items:center;overflow:hidden;padding:0 3rem}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#080808 40%,#111 100%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(250,204,21,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(250,204,21,0.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 0%,transparent 100%)}
+.hero-glow{position:absolute;top:20%;right:10%;width:600px;height:600px;background:radial-gradient(circle,rgba(250,204,21,0.08) 0%,transparent 70%);pointer-events:none}
+.hero-content{position:relative;z-index:2;max-width:700px}
+.hero-eyebrow{font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:0.2em;color:var(--yellow);text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';display:block;width:32px;height:2px;background:var(--yellow)}
+.hero h1{font-family:var(--font-display);font-size:clamp(56px,8vw,120px);font-weight:900;line-height:0.9;letter-spacing:-0.02em;text-transform:uppercase;margin-bottom:1.5rem}
+.hero h1 .highlight{color:var(--yellow)}
+.hero p{font-size:16px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:2.5rem;font-weight:300}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-primary{background:var(--yellow);color:#000;border:none;border-radius:10px;padding:16px 32px;font-family:var(--font-display);font-size:15px;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;transition:transform 0.15s}
+.btn-primary:hover{transform:scale(1.04)}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:10px;padding:16px 32px;font-family:var(--font-display);font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;transition:border-color 0.2s,color 0.2s}
+.btn-secondary:hover{border-color:var(--yellow);color:var(--yellow)}
+.hero-stats{position:absolute;bottom:3rem;left:3rem;right:3rem;display:flex;gap:3rem;z-index:2}
+.stat-item{display:flex;flex-direction:column}
+.stat-val{font-family:var(--font-display);font-size:32px;font-weight:900;color:var(--yellow);line-height:1}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px}
+
+/* ── SECTION TITLES ── */
+.section{padding:6rem 3rem}
+.section-header{margin-bottom:3rem}
+.section-title{font-family:var(--font-display);font-size:clamp(32px,4vw,56px);font-weight:900;text-transform:uppercase;letter-spacing:-0.01em;line-height:1}
+.section-title .highlight{color:var(--yellow)}
+.section-sub{font-size:12px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-top:8px}
+
+/* ── CATEGORIES ── */
+.categories{background:var(--bg2)}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.cat-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.2s;position:relative}
+.cat-card:hover{border-color:rgba(250,204,21,0.4);transform:translateY(-4px)}
+.cat-img-wrap{height:200px;overflow:hidden;background:#111;position:relative}
+.cat-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.cat-card:hover .cat-img-wrap img{transform:scale(1.06)}
+.cat-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px}
+.cat-body{padding:20px}
+.cat-name{font-family:var(--font-display);font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:4px}
+.cat-count{font-size:12px;color:var(--muted)}
+.cat-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--yellow);margin-top:12px;text-decoration:none;transition:gap 0.2s}
+.cat-card:hover .cat-link{gap:10px}
+
+/* ── PRODUCTS ── */
+.products-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;flex-wrap:gap}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2rem}
+.filter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 16px;font-family:var(--font-display);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;transition:all 0.15s}
+.filter-btn:hover,.filter-btn.active{background:var(--yellow-dim);border-color:var(--yellow);color:var(--yellow)}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.product-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.2s;position:relative}
+.product-card:hover{border-color:rgba(250,204,21,0.3);transform:translateY(-3px)}
+.product-img-wrap{height:220px;background:#111;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:64px}
+.product-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.product-card:hover .product-img-wrap img{transform:scale(1.05)}
+.product-badge{position:absolute;top:12px;left:12px;background:var(--yellow);color:#000;font-family:var(--font-display);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:4px 10px;border-radius:6px}
+.product-badge.new{background:#22c55e;color:#000}
+.product-badge.sale{background:#ef4444;color:#fff}
+.product-wishlist{position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.6);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s;font-size:14px}
+.product-wishlist:hover,.product-wishlist.active{background:rgba(239,68,68,0.2);border-color:#ef4444}
+.product-body{padding:16px}
+.product-brand{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
+.product-name{font-family:var(--font-display);font-size:17px;font-weight:700;line-height:1.2;margin-bottom:8px}
+.product-rating{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.stars{color:var(--yellow);font-size:12px;letter-spacing:1px}
+.rating-count{font-size:11px;color:var(--muted)}
+.product-price-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.product-price{font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--yellow)}
+.product-price-old{font-size:13px;color:var(--muted);text-decoration:line-through}
+.add-to-cart-btn{background:var(--yellow);color:#000;border:none;border-radius:8px;padding:8px 14px;font-family:var(--font-display);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;transition:transform 0.15s,opacity 0.15s;white-space:nowrap}
+.add-to-cart-btn:hover{transform:scale(1.06)}
+.add-to-cart-btn:active{transform:scale(0.96)}
+.added{background:#22c55e!important}
+
+/* ── BANNER ── */
+.promo-banner{background:var(--yellow);padding:4rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.promo-text h2{font-family:var(--font-display);font-size:clamp(28px,4vw,52px);font-weight:900;text-transform:uppercase;color:#000;line-height:1}
+.promo-text p{font-size:14px;color:#5a4800;margin-top:8px;letter-spacing:0.05em}
+.promo-btn{background:#000;color:var(--yellow);border:none;border-radius:10px;padding:16px 32px;font-family:var(--font-display);font-size:15px;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;transition:transform 0.15s;white-space:nowrap}
+.promo-btn:hover{transform:scale(1.04)}
+
+/* ── CART DRAWER ── */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:199;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.cart-overlay.open{opacity:1;pointer-events:all}
+.cart-drawer{position:fixed;top:0;right:0;width:100%;max-width:420px;height:100%;background:var(--bg2);border-left:1px solid var(--border);z-index:200;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column}
+.cart-drawer.open{transform:translateX(0)}
+.cart-header{padding:1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cart-title{font-family:var(--font-display);font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:0.05em}
+.cart-close{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:border-color 0.2s}
+.cart-close:hover{border-color:var(--yellow);color:var(--yellow)}
+.cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem}
+.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;color:var(--muted)}
+.cart-empty-icon{font-size:56px;opacity:0.4}
+.cart-empty p{font-family:var(--font-display);font-size:16px;text-transform:uppercase;letter-spacing:0.1em}
+.cart-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);align-items:center}
+.cart-item-img{width:60px;height:60px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden}
+.cart-item-img img{width:100%;height:100%;object-fit:cover}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{font-family:var(--font-display);font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-brand{font-size:11px;color:var(--muted);margin-top:2px}
+.cart-item-price{font-family:var(--font-display);font-size:16px;font-weight:900;color:var(--yellow);margin-top:4px}
+.cart-item-qty{display:flex;align-items:center;gap:8px;margin-top:6px}
+.qty-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:border-color 0.15s}
+.qty-btn:hover{border-color:var(--yellow);color:var(--yellow)}
+.qty-val{font-family:var(--font-display);font-size:14px;font-weight:700;min-width:20px;text-align:center}
+.cart-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px;transition:color 0.15s;flex-shrink:0}
+.cart-remove:hover{color:#ef4444}
+.cart-footer{padding:1.5rem;border-top:1px solid var(--border)}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.cart-total-label{font-family:var(--font-display);font-size:13px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)}
+.cart-total-val{font-family:var(--font-display);font-size:24px;font-weight:900;color:var(--yellow)}
+.checkout-btn{width:100%;padding:16px;background:var(--yellow);color:#000;border:none;border-radius:10px;font-family:var(--font-display);font-size:15px;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;transition:transform 0.15s}
+.checkout-btn:hover{transform:scale(1.02)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg3);border:1px solid rgba(34,197,94,0.4);border-radius:10px;padding:12px 20px;display:flex;align-items:center;gap:10px;z-index:300;opacity:0;transition:all 0.3s;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast-icon{color:#22c55e;font-size:16px}
+.toast-msg{font-family:var(--font-display);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+
+/* ── FOOTER ── */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:4rem 3rem 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem}
+.footer-brand .logo{font-family:var(--font-display);font-size:24px;font-weight:900;margin-bottom:12px;display:block}
+.footer-brand p{font-size:13px;color:var(--muted);line-height:1.7;max-width:220px}
+.footer-col h4{font-family:var(--font-display);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:16px}
+.footer-col a{display:block;font-size:14px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color 0.2s}
+.footer-col a:hover{color:var(--yellow)}
+.footer-bottom{grid-column:1/-1;border-top:1px solid var(--border);padding-top:2rem;text-align:center;font-size:12px;color:var(--muted)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .navbar{padding:0 1rem;gap:1rem}
+  .nav-links span:not(.cart-wrapper){display:none}
+  .section{padding:4rem 1.5rem}
+  .hero{padding:0 1.5rem}
+  .hero-stats{left:1.5rem;right:1.5rem;gap:2rem;flex-wrap:wrap}
+  .promo-banner{padding:2.5rem 1.5rem}
+  footer{padding:3rem 1.5rem 2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">BIKE<span class="highlight">PRIME</span></div>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search parts, helmets, tires..." oninput="handleSearch(this.value)">
+    <button class="search-btn">🔍</button>
+  </div>
+  <div class="nav-links">
+    <span onclick="scrollTo({top:document.getElementById('products').offsetTop-80,behavior:'smooth'})">Products</span>
+    <span onclick="scrollTo({top:document.getElementById('categories').offsetTop-80,behavior:'smooth'})">Categories</span>
+    <span class="cart-wrapper">
+      <button class="cart-btn" onclick="toggleCart()">
+        🛒 Cart <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Premium Motorcycle Parts</div>
+    <h1>PREMIUM<br><span class="highlight">COMPONENTS</span></h1>
+    <p>Upgrade your ride in seconds</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="scrollTo({top:document.getElementById('products').offsetTop-80,behavior:'smooth'})">Shop Gear →</button>
+      <button class="btn-secondary" onclick="scrollTo({top:document.getElementById('categories').offsetTop-80,behavior:'smooth'})">Browse Categories</button>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item"><span class="stat-val">4,200+</span><span class="stat-label">Parts in stock</span></div>
+    <div class="stat-item"><span class="stat-val">98%</span><span class="stat-label">Satisfaction rate</span></div>
+    <div class="stat-item"><span class="stat-val">24h</span><span class="stat-label">Express dispatch</span></div>
+    <div class="stat-item"><span class="stat-val">50+</span><span class="stat-label">Brands stocked</span></div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section categories" id="categories">
+  <div class="section-header">
+    <h2 class="section-title">SHOP BY <span class="highlight">CATEGORY</span></h2>
+    <p class="section-sub">Everything your machine needs</p>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card" onclick="filterCategory('Drivetrain')">
+      <div class="cat-img-wrap"><div class="cat-img-placeholder">⚙️</div></div>
+      <div class="cat-body">
+        <div class="cat-name">Drivetrain</div>
+        <div class="cat-count">Chain, sprockets, bearings & more</div>
+        <a class="cat-link">Shop now →</a>
+      </div>
+    </div>
+    <div class="cat-card" onclick="filterCategory('Braking')">
+      <div class="cat-img-wrap"><div class="cat-img-placeholder">🔴</div></div>
+      <div class="cat-body">
+        <div class="cat-name">Braking Systems</div>
+        <div class="cat-count">Pads, discs, master cylinders</div>
+        <a class="cat-link">Shop now →</a>
+      </div>
+    </div>
+    <div class="cat-card" onclick="filterCategory('Tires')">
+      <div class="cat-img-wrap"><div class="cat-img-placeholder">🛞</div></div>
+      <div class="cat-body">
+        <div class="cat-name">Tires & Wheels</div>
+        <div class="cat-count">Sport, touring & off-road rubber</div>
+        <a class="cat-link">Shop now →</a>
+      </div>
+    </div>
+    <div class="cat-card" onclick="filterCategory('Accessories')">
+      <div class="cat-img-wrap"><div class="cat-img-placeholder">🪖</div></div>
+      <div class="cat-body">
+        <div class="cat-name">Accessories</div>
+        <div class="cat-count">Helmets, gear, luggage & tech</div>
+        <a class="cat-link">Shop now →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="section" id="products">
+  <div class="section-header products-header">
+    <div>
+      <h2 class="section-title">FEATURED <span class="highlight">PARTS</span></h2>
+      <p class="section-sub" id="resultsLabel">Showing all products</p>
+    </div>
+  </div>
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" onclick="filterCategory('All')">All</button>
+    <button class="filter-btn" onclick="filterCategory('Drivetrain')">Drivetrain</button>
+    <button class="filter-btn" onclick="filterCategory('Braking')">Braking</button>
+    <button class="filter-btn" onclick="filterCategory('Tires')">Tires & Wheels</button>
+    <button class="filter-btn" onclick="filterCategory('Accessories')">Accessories</button>
+    <button class="filter-btn" onclick="filterCategory('Sale')">On Sale</button>
+  </div>
+  <div class="product-grid" id="productGrid"></div>
+</section>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner">
+  <div class="promo-text">
+    <h2>FREE SHIPPING<br>OVER ₹4,999</h2>
+    <p>Express dispatch on all orders placed before 2 PM</p>
+  </div>
+  <button class="promo-btn" onclick="scrollTo({top:document.getElementById('products').offsetTop-80,behavior:'smooth'})">Shop Now →</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <span class="logo">BIKE<span class="highlight">PRIME</span></span>
+    <p>Premium motorcycle parts and accessories for riders who demand the best.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Shop</h4>
+    <a href="#">Drivetrain</a>
+    <a href="#">Braking Systems</a>
+    <a href="#">Tires & Wheels</a>
+    <a href="#">Accessories</a>
+  </div>
+  <div class="footer-col">
+    <h4>Support</h4>
+    <a href="#">Track Order</a>
+    <a href="#">Returns</a>
+    <a href="#">Fitment Guide</a>
+    <a href="#">Contact Us</a>
+  </div>
+  <div class="footer-col">
+    <h4>Company</h4>
+    <a href="#">About BikePrime</a>
+    <a href="#">Careers</a>
+    <a href="#">Press</a>
+    <a href="#">Privacy Policy</a>
+  </div>
+  <div class="footer-bottom">© 2025 BikePrime — All rights reserved. Part of the Ekvira Motors group.</div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <span class="cart-title">Your Cart</span>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-val" id="cartTotal">₹0</span>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">Checkout →</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✓</span>
+  <span class="toast-msg" id="toastMsg">Added to cart</span>
+</div>
+
+<script>
+const products = [
+  { id:1, name:'Racing Chain Kit 520', brand:'DID', category:'Drivetrain', price:4299, oldPrice:5299, badge:'Sale', emoji:'⛓️', rating:4.8, reviews:142 },
+  { id:2, name:'Sintered Brake Pads', brand:'Brembo', category:'Braking', price:2199, oldPrice:null, badge:'New', emoji:'🔴', rating:4.9, reviews:89 },
+  { id:3, name:'Supercorsa SP Tire Set', brand:'Pirelli', category:'Tires', price:18999, oldPrice:21999, badge:'Sale', emoji:'🛞', rating:4.7, reviews:204 },
+  { id:4, name:'Full-Face Helmet X14', brand:'Shoei', category:'Accessories', price:38000, oldPrice:null, badge:'New', emoji:'🪖', rating:4.9, reviews:321 },
+  { id:5, name:'Radial Brake Master 19RCS', brand:'Brembo', category:'Braking', price:12500, oldPrice:14000, badge:'Sale', emoji:'🔩', rating:4.8, reviews:67 },
+  { id:6, name:'Aftermarket Sprocket Set', brand:'Renthal', category:'Drivetrain', price:3400, oldPrice:null, badge:null, emoji:'⚙️', rating:4.6, reviews:55 },
+  { id:7, name:'Supermoto Wheel Set 17"', brand:'Excel', category:'Tires', price:24500, oldPrice:28000, badge:'Sale', emoji:'⭕', rating:4.5, reviews:38 },
+  { id:8, name:'Tank Bag 20L Magnetic', brand:'Kriega', category:'Accessories', price:6800, oldPrice:null, badge:null, emoji:'🎒', rating:4.7, reviews:112 },
+  { id:9, name:'SS Braided Brake Lines', brand:'Galfer', category:'Braking', price:3200, oldPrice:3800, badge:'Sale', emoji:'〰️', rating:4.8, reviews:93 },
+  { id:10, name:'Quickshifter Pro Kit', brand:'Healtech', category:'Drivetrain', price:9200, oldPrice:null, badge:'New', emoji:'⚡', rating:4.9, reviews:47 },
+  { id:11, name:'Track Day Gloves GP-X', brand:'Alpinestars', category:'Accessories', price:8500, oldPrice:9500, badge:'Sale', emoji:'🧤', rating:4.7, reviews:188 },
+  { id:12, name:'Road Smart IV Tire 180/55', brand:'Dunlop', category:'Tires', price:7200, oldPrice:null, badge:null, emoji:'🛞', rating:4.6, reviews:156 },
+];
+
+let cart = [];
+let currentFilter = 'All';
+let searchQuery = '';
+
+function stars(r){ return '★'.repeat(Math.round(r)) + '☆'.repeat(5 - Math.round(r)); }
+
+function renderProducts(list){
+  const grid = document.getElementById('productGrid');
+  if(!list.length){ grid.innerHTML = '<p style="color:var(--muted);font-family:var(--font-display);text-transform:uppercase;letter-spacing:0.1em;grid-column:1/-1;padding:3rem 0;text-align:center">No products found</p>'; return; }
+  grid.innerHTML = list.map(p => `
+    <div class="product-card" id="pc-${p.id}">
+      <div class="product-img-wrap">
+        <span>${p.emoji}</span>
+        ${p.badge ? `<span class="product-badge ${p.badge==='New'?'new':p.badge==='Sale'?'sale':''}">${p.badge}</span>` : ''}
+        <button class="product-wishlist" id="wl-${p.id}" onclick="toggleWishlist(${p.id})" title="Wishlist">♡</button>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-rating"><span class="stars">${stars(p.rating)}</span><span class="rating-count">(${p.reviews})</span></div>
+        <div class="product-price-row">
+          <div>
+            <div class="product-price">₹${p.price.toLocaleString('en-IN')}</div>
+            ${p.oldPrice ? `<div class="product-price-old">₹${p.oldPrice.toLocaleString('en-IN')}</div>` : ''}
+          </div>
+          <button class="add-to-cart-btn" id="atc-${p.id}" onclick="addToCart(${p.id})">Add +</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterCategory(cat){
+  currentFilter = cat;
+  searchQuery = '';
+  document.getElementById('searchInput').value = '';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.textContent.trim().replace(' & ',' & ') === cat || (cat==='All' && b.textContent.trim()==='All')));
+  applyFilters();
+  scrollTo({top:document.getElementById('products').offsetTop-80,behavior:'smooth'});
+}
+
+function handleSearch(val){
+  searchQuery = val.toLowerCase();
+  currentFilter = 'All';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.textContent.trim()==='All'));
+  applyFilters();
+}
+
+function applyFilters(){
+  let list = products;
+  if(currentFilter === 'Sale') list = list.filter(p => p.badge === 'Sale');
+  else if(currentFilter !== 'All') list = list.filter(p => p.category === currentFilter || p.category.includes(currentFilter));
+  if(searchQuery) list = list.filter(p => p.name.toLowerCase().includes(searchQuery) || p.brand.toLowerCase().includes(searchQuery) || p.category.toLowerCase().includes(searchQuery));
+  document.getElementById('resultsLabel').textContent = `Showing ${list.length} product${list.length!==1?'s':''}`;
+  renderProducts(list);
+}
+
+function addToCart(id){
+  const p = products.find(x=>x.id===id);
+  const ex = cart.find(x=>x.id===id);
+  if(ex) ex.qty++;
+  else cart.push({...p, qty:1});
+  updateCart();
+  const btn = document.getElementById('atc-'+id);
+  if(btn){ btn.classList.add('added'); btn.textContent='✓ Added'; setTimeout(()=>{ btn.classList.remove('added'); btn.textContent='Add +'; },1500); }
+  showToast(p.name + ' added to cart');
+}
+
+function removeFromCart(id){ cart = cart.filter(x=>x.id!==id); updateCart(); }
+function changeQty(id,delta){ const item=cart.find(x=>x.id===id); if(item){ item.qty+=delta; if(item.qty<=0) removeFromCart(id); else updateCart(); } }
+
+function updateCart(){
+  const count = cart.reduce((s,x)=>s+x.qty,0);
+  document.getElementById('cartCount').textContent = count;
+  const total = cart.reduce((s,x)=>s+(x.price*x.qty),0);
+  document.getElementById('cartTotal').textContent = '₹'+total.toLocaleString('en-IN');
+  const el = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+  if(!cart.length){
+    el.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Your cart is empty</p></div>`;
+    footer.style.display='none';
+  } else {
+    footer.style.display='block';
+    el.innerHTML = cart.map(item=>`
+      <div class="cart-item">
+        <div class="cart-item-img">${item.emoji}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-brand">${item.brand}</div>
+          <div class="cart-item-price">₹${(item.price*item.qty).toLocaleString('en-IN')}</div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+            <span class="qty-val">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+          </div>
+        </div>
+        <button class="cart-remove" onclick="removeFromCart(${item.id})">✕</button>
+      </div>
+    `).join('');
+  }
+}
+
+function toggleCart(){
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('cartDrawer').classList.contains('open') ? 'hidden' : '';
+}
+
+function toggleWishlist(id){
+  const btn = document.getElementById('wl-'+id);
+  if(btn){ btn.classList.toggle('active'); btn.textContent = btn.classList.contains('active') ? '♥' : '♡'; }
+}
+
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function checkout(){
+  const total = document.getElementById('cartTotal').textContent;
+  toggleCart();
+  cart = [];
+  updateCart();
+  showToast('Order placed! Total: ' + total);
+}
+
+// Init
+updateCart();
+renderProducts(products);
+</script>
+</body>
+</html>

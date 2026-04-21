@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BikeMaster | Ultra Motion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .heading-font { font-family: 'Orbitron', sans-serif; }
+     /* Scroll Progress Bar */
+        #progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 100; background: rgba(255,255,255,0.1); }
+        #progress-bar { height: 100%; width: 0%; background: #facc15; box-shadow: 0 0 15px #facc15; }
+
+          /* 3D Card Container */
+        .tilt-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.1s ease;
+        }
+        .inner-content { transform: translateZ(50px); }
+
+
+        /* Animated Text */
+        .char { display: inline-block; transform: translateY(100px); opacity: 0; }
+        /* Darker glass effect */
+        .ultra-glass {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed top-right corner button -->
+<div id="auth-section" class="fixed top-4 right-4 z-50 text-center">
+    <a href="auth.html" class="inline-block px-5 py-2.5 bg-yellow-400 text-black font-black heading-font rounded-xl hover:scale-[1.02] uppercase tracking-tighter transition-transform text-sm">
+        Login/Register →
+    </a>
+    <p id="user-welcome" class="mt-2 hidden text-yellow-400 font-bold text-sm"></p>
+</div>
+    <div id="progress-container"><div id="progress-bar"></div></div>
+
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 opacity-40">
+            <video autoplay muted loop class="w-full h-full object-cover">
+                <source src="https://cdn.pixabay.com/video/2021/08/17/85304-588820120_large.mp4" type="video/mp4">
+            </video>
+        </div>
+       
+        <div class="relative z-10 text-center">
+            <h1 class="heading-font text-5xl md:text-[8vw] leading-none mb-4" id="split-text">
+                EKVIRA<br><span class="text-yellow-400">_MOTORS</span>
+            </h1>
+
+        
+    </section>
+    <section class="py-32 px-10 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="tilt-card ultra-glass p-10 rounded-3xl h-[400px] flex flex-col justify-end group">
+            <div class="inner-content">
+                <div class="text-6xl mb-4 group-hover:scale-110 transition-transform">🏎️</div>
+                <h3 class="heading-font text-2xl mb-2">Track Ready</h3>
+                <p class="text-gray-500">Optimized aerodynamics and weight reduction for racing.</p>
+            </div>
+        </div>
+  <div class="tilt-card ultra-glass p-10 rounded-3xl h-[400px] flex flex-col justify-end group border-yellow-400/20">
+            <div class="inner-content">
+                <div class="text-6xl mb-4 group-hover:scale-110 transition-transform">🛠️</div>
+                <h3 class="heading-font text-2xl mb-2">Master Service</h3>
+                <p class="text-gray-500">Complete teardown and restoration by elite technicians.</p>
+            </div>
+        </div>
+ <div class="tilt-card ultra-glass p-10 rounded-3xl h-[400px] flex flex-col justify-end group">
+            <div class="inner-content">
+                <div class="text-6xl mb-4 group-hover:scale-110 transition-transform">💻</div>
+                <h3 class="heading-font text-2xl mb-2">Tech Scan</h3>
+                <p class="text-gray-500">AI-driven diagnostics to find issues before they happen.</p>
+            </div>
+        </div>
+    </section>
+    <section class="py-32 px-6 relative overflow-hidden" id="booking-system">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-yellow-400/5 rounded-full blur-[100px]"></div>
+       <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="heading-font text-4xl md:text-6xl mb-4 reveal-text">READY TO <span class="text-yellow-400">RIDE?</span></h2>
+            <p class="text-gray-500 uppercase tracking-widest text-sm">Secure your premium service slot in 30 seconds</p>
+        </div>
+
+<div class="ultra-glass rounded-[40px] p-8 md:p-16 relative z-10" id="booking-card">
+           
+            <div class="flex justify-between mb-12 relative">
+                <div class="absolute top-1/2 left-0 w-full h-[1px] bg-white/10 -z-10"></div>
+                <div class="step-dot active w-10 h-10 rounded-full bg-yellow-400 text-black flex items-center justify-center font-bold">1</div>
+                <div class="step-dot w-10 h-10 rounded-full bg-zinc-800 text-white flex items-center justify-center font-bold transition-all duration-500">2</div>
+                <div class="step-dot w-10 h-10 rounded-full bg-zinc-800 text-white flex items-center justify-center font-bold transition-all duration-500">3</div>
+            </div>
+ <!-- REPLACE everything inside:
+     <div class="ultra-glass rounded-[40px] p-8 md:p-16 relative z-10" id="booking-card">
+     ...with the content below... -->
+
+<!-- Step dots (visual only, updated by JS) -->
+<div class="flex justify-between mb-12 relative">
+    <div class="absolute top-1/2 left-0 w-full h-[1px] bg-white/10 -z-10"></div>
+    <div class="step-dot w-10 h-10 rounded-full bg-yellow-400 text-black flex items-center justify-center font-bold transition-all duration-500" id="vdot1">1</div>
+    <div class="step-dot w-10 h-10 rounded-full bg-zinc-800 text-white flex items-center justify-center font-bold transition-all duration-500" id="vdot2">2</div>
+    <div class="step-dot w-10 h-10 rounded-full bg-zinc-800 text-white flex items-center justify-center font-bold transition-all duration-500" id="vdot3">3</div>
+</div>
+
+<style>
+    .field-label { font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #666; margin-bottom: 8px; display: block; }
+    .field-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e8e8e8; font-family: 'Inter', sans-serif; font-size: 15px; padding: 16px; border-radius: 16px; outline: none; transition: border-color 0.2s, background 0.2s; appearance: none; }
+    .field-input:focus { border-color: #facc15; background: rgba(250,204,21,0.05); }
+    .field-input option { background: #111; }
+    .bk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    @media (max-width: 600px) { .bk-grid { grid-template-columns: 1fr; } }
+    .bk-step { display: none; }
+    .bk-step.visible { display: block; animation: bkFadeIn 0.3s ease; }
+    @keyframes bkFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .bk-btn-next { width: 100%; padding: 20px; background: #facc15; color: #000; border: none; border-radius: 16px; font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: transform 0.15s; margin-top: 8px; }
+    .bk-btn-next:hover { transform: scale(1.015); }
+    .bk-btn-next:active { transform: scale(0.97); }
+    .bk-btn-back { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #777; border-radius: 16px; padding: 14px 20px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+    .bk-btn-back:hover { border-color: #555; color: #aaa; }
+    .bk-bottom { display: flex; gap: 12px; align-items: center; margin-top: 8px; }
+    .bk-bottom .bk-btn-next { flex: 1; margin-top: 0; }
+    /* Calendar */
+    .bk-month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .bk-month-nav span { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 700; color: #e8e8e8; letter-spacing: 0.05em; text-transform: uppercase; }
+    .bk-month-nav button { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #999; border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s, color 0.15s; }
+    .bk-month-nav button:hover { border-color: #facc15; color: #facc15; }
+    .bk-day-headers { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 8px; }
+    .bk-day-header { text-align: center; font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700; color: #444; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 0; }
+    .bk-date-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 20px; }
+    .bk-date-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid rgba(255,255,255,0.06); color: #444; background: rgba(255,255,255,0.02); transition: all 0.15s; }
+    .bk-date-cell.available { color: #aaa; border-color: rgba(255,255,255,0.1); }
+    .bk-date-cell.available:hover { border-color: #facc15; color: #facc15; background: rgba(250,204,21,0.05); }
+    .bk-date-cell.selected { background: #facc15; color: #000; border-color: #facc15; }
+    .bk-date-cell.empty { border: none; background: transparent; cursor: default; }
+    /* Time slots */
+    .bk-time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .bk-time-cell { padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); text-align: center; cursor: pointer; transition: all 0.15s; }
+    .bk-time-cell .tv { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: #aaa; display: block; }
+    .bk-time-cell .tp { font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700; color: #444; letter-spacing: 0.1em; text-transform: uppercase; }
+    .bk-time-cell:hover { border-color: #facc15; background: rgba(250,204,21,0.05); }
+    .bk-time-cell:hover .tv { color: #facc15; }
+    .bk-time-cell.selected { border-color: #facc15; background: rgba(250,204,21,0.05); }
+    .bk-time-cell.selected .tv { color: #facc15; }
+    /* Summary */
+    .bk-summary-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .bk-summary-label { font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #555; }
+    .bk-summary-val { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: #e8e8e8; }
+    /* Success */
+    .bk-success { text-align: center; padding: 3rem 0; }
+    .bk-success-icon { width: 72px; height: 72px; background: #facc15; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 30px; color: #000; font-weight: 900; }
+    .bk-success-title { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 900; color: #facc15; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+    .bk-success-sub { font-size: 14px; color: #666; line-height: 1.7; max-width: 360px; margin: 0 auto; }
+</style>
+
+<!-- Step 1: Service Details -->
+<div class="bk-step visible" id="bk-step1">
+    <div class="bk-grid">
+        <div>
+            <label class="field-label">Motorcycle model</label>
+            <input type="text" class="field-input" id="bkModel" placeholder="e.g. Ducati Panigale V4">
+        </div>
+        <div>
+            <label class="field-label">Service type</label>
+            <select class="field-input" id="bkService">
+                <option value="Desmo Service">Desmo service</option>
+                <option value="Track Prep">Track prep</option>
+                <option value="General Maintenance">General maintenance</option>
+            </select>
+        </div>
+    </div>
+    <div class="bk-grid">
+        <div>
+            <label class="field-label">Full name</label>
+            <input type="text" class="field-input" id="bkName" placeholder="Your name">
+        </div>
+        <div>
+            <label class="field-label">Phone number</label>
+            <input type="text" class="field-input" id="bkPhone" placeholder="+1 (555) 000-0000">
+        </div>
+    </div>
+    <button class="bk-btn-next" onclick="bkGoStep(2)">Next: Choose Date →</button>
+</div>
+
+<!-- Step 2: Date & Time -->
+<div class="bk-step" id="bk-step2">
+    <div class="bk-month-nav">
+        <button onclick="bkPrevMonth()">&#8249;</button>
+        <span id="bkMonthLabel"></span>
+        <button onclick="bkNextMonth()">&#8250;</button>
+    </div>
+    <div class="bk-day-headers">
+        <div class="bk-day-header">Sun</div><div class="bk-day-header">Mon</div><div class="bk-day-header">Tue</div>
+        <div class="bk-day-header">Wed</div><div class="bk-day-header">Thu</div><div class="bk-day-header">Fri</div>
+        <div class="bk-day-header">Sat</div>
+    </div>
+    <div class="bk-date-grid" id="bkDateGrid"></div>
+    <label class="field-label">Select time slot</label>
+    <div class="bk-time-grid" id="bkTimeGrid"></div>
+    <div class="bk-bottom">
+        <button class="bk-btn-back" onclick="bkGoStep(1)">&#8592; Back</button>
+        <button class="bk-btn-next" onclick="bkGoStep(3)">Next: Confirm →</button>
+    </div>
+</div>
+
+<!-- Step 3: Confirm -->
+<div class="bk-step" id="bk-step3">
+    <div id="bkSummary"></div>
+    <div class="bk-bottom" style="margin-top: 16px;">
+        <button class="bk-btn-back" onclick="bkGoStep(2)">&#8592; Back</button>
+        <button class="bk-btn-next" onclick="bkConfirm()">Confirm Booking ✓</button>
+    </div>
+</div>
+
+<!-- Step 4: Success -->
+<div class="bk-step" id="bk-step4">
+    <div class="bk-success">
+        <div class="bk-success-icon">✓</div>
+        <div class="bk-success-title">You're on the list</div>
+        <p class="bk-success-sub" id="bkSuccessMsg"></p>
+    </div>
+</div>
+
+<script>
+(function() {
+    const bkState = { step: 1, day: null, time: null, month: new Date().getMonth(), year: new Date().getFullYear() };
+    const bkTimes = ['8:00','9:30','11:00','13:00','14:30','16:00'];
+    const bkMonths = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const bkMonthsShort = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    window.bkGoStep = function(n) {
+        document.getElementById('bk-step' + bkState.step).classList.remove('visible');
+        bkState.step = n;
+        document.getElementById('bk-step' + n).classList.add('visible');
+        // Update visual dots
+        [1,2,3].forEach(i => {
+            const dot = document.getElementById('vdot' + i);
+            if (i < n) { dot.classList.add('bg-yellow-400','text-black'); dot.classList.remove('bg-zinc-800','text-white'); }
+            else if (i === n) { dot.classList.add('bg-yellow-400','text-black'); dot.classList.remove('bg-zinc-800','text-white'); }
+            else { dot.classList.remove('bg-yellow-400','text-black'); dot.classList.add('bg-zinc-800','text-white'); }
+        });
+        if (n === 2) bkRenderCal();
+        if (n === 3) bkRenderSummary();
+    };
+
+    function bkRenderCal() {
+        document.getElementById('bkMonthLabel').textContent = bkMonths[bkState.month] + ' ' + bkState.year;
+        const firstDay = new Date(bkState.year, bkState.month, 1).getDay();
+        const daysInMonth = new Date(bkState.year, bkState.month + 1, 0).getDate();
+        const today = new Date(); today.setHours(0,0,0,0);
+        let html = '';
+        for (let i = 0; i < firstDay; i++) html += '<div class="bk-date-cell empty"></div>';
+        for (let d = 1; d <= daysInMonth; d++) {
+            const date = new Date(bkState.year, bkState.month, d);
+            const avail = date >= today && date.getDay() !== 0;
+            const sel = bkState.day === d;
+            let cls = 'bk-date-cell' + (!avail ? '' : sel ? ' selected' : ' available');
+            html += `<div class="${cls}"${avail ? ` onclick="bkSelectDay(${d})"` : ''}>${d}</div>`;
+        }
+        document.getElementById('bkDateGrid').innerHTML = html;
+        let thtml = '';
+        bkTimes.forEach(t => {
+            const [h, m] = t.split(':').map(Number);
+            const period = h < 12 ? 'AM' : 'PM';
+            const h12 = h > 12 ? h - 12 : h;
+            thtml += `<div class="bk-time-cell${bkState.time === t ? ' selected' : ''}" onclick="bkSelectTime('${t}')"><span class="tv">${h12}:${String(m).padStart(2,'0')}</span><span class="tp">${period}</span></div>`;
+        });
+        document.getElementById('bkTimeGrid').innerHTML = thtml;
+    }
+
+    window.bkSelectDay = function(d) { bkState.day = d; bkRenderCal(); };
+    window.bkSelectTime = function(t) { bkState.time = t; bkRenderCal(); };
+    window.bkPrevMonth = function() { bkState.month--; if (bkState.month < 0) { bkState.month = 11; bkState.year--; } bkState.day = null; bkRenderCal(); };
+    window.bkNextMonth = function() { bkState.month++; if (bkState.month > 11) { bkState.month = 0; bkState.year++; } bkState.day = null; bkRenderCal(); };
+
+    function bkRenderSummary() {
+        const rows = [
+            ['Motorcycle', document.getElementById('bkModel').value || '—'],
+            ['Service', document.getElementById('bkService').value],
+            ['Date', bkState.day ? `${bkMonthsShort[bkState.month]} ${bkState.day}, ${bkState.year}` : '—'],
+            ['Time', bkState.time || '—'],
+            ['Name', document.getElementById('bkName').value || '—'],
+            ['Phone', document.getElementById('bkPhone').value || '—'],
+        ];
+        document.getElementById('bkSummary').innerHTML = rows.map(([l,v]) =>
+            `<div class="bk-summary-row"><span class="bk-summary-label">${l}</span><span class="bk-summary-val">${v}</span></div>`
+        ).join('');
+    }
+
+    window.bkConfirm = function() {
+        const model = document.getElementById('bkModel').value || 'your motorcycle';
+        const service = document.getElementById('bkService').value;
+        const dateStr = bkState.day ? `${bkMonthsShort[bkState.month]} ${bkState.day}, ${bkState.year}` : '';
+        document.getElementById('bkSuccessMsg').textContent = `${service} for ${model} is confirmed${dateStr ? ' for ' + dateStr : ''}${bkState.time ? ' at ' + bkState.time : ''}. See you in the pit lane.`;
+        bkGoStep(4);
+    };
+
+    bkRenderCal();
+})();
+</script>
+  <div class="step-content hidden space-y-8" id="step-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <input type="date" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none text-white invert-calendar">
+                        <input type="time" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none text-white invert-calendar">
+                    </div>
+                    <div class="flex gap-4">
+                        <button type="button" onclick="nextStep(1)" class="w-1/3 py-6 border border-white/10 rounded-2xl hover:bg-white/5 transition-all">Back</button>
+                        <button type="button" onclick="nextStep(3)" class="w-2/3 py-6 bg-yellow-400 text-black font-black heading-font rounded-2xl uppercase">Contact Info →</button>
+                    </div>
+                </div>
+                 <div class="step-content hidden space-y-8" id="step-3">
+                    <input type="tel" placeholder="Phone Number" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-yellow-400">
+                    <textarea placeholder="Special instructions (Optional)" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-yellow-400 h-32"></textarea>
+                    <button type="submit" class="w-full py-6 bg-white text-black font-black heading-font rounded-2xl hover:bg-yellow-400 transition-colors uppercase">Confirm Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <h3 class="heading-font text-4xl md:text-6xl mb-4 reveal-text">Need parts <span class="text-yellow-400">go to bike prime?</span></h3>
+    <a href="pa.html" class="w-full py-6 bg-yellow-400 text-black font-black heading-font rounded-2xl hover:scale-[1.02] active:scale-95 transition-transform uppercase tracking-tighter inline-block text-center">Explore BikePrime →
+     <div class="absolute bottom-0 left-0 w-full h-96 bg-yellow-400/5 rounded-full blur-[100px]"></div>
+    </a>
+</section>
+<script>
+    // Booking Logic & Animations//
+
+    function nextStep(stepNumber) {
+        const steps = document.querySelectorAll('.step-content');
+        const dots = document.querySelectorAll('.step-dot');
+       
+        // 1. Fade Out Current Step
+        gsap.to(".step-content:not(.hidden)", {
+            opacity: 0,
+            x: -20,
+            duration: 0.3,
+            onComplete: () => {
+                // 2. Hide all and show target
+                steps.forEach(s => s.classList.add('hidden'));
+                const targetStep = document.getElementById(`step-${stepNumber}`);
+                targetStep.classList.remove('hidden');
+                 // 3. Update Dots
+                dots.forEach((dot, index) => {
+                    if (index < stepNumber) {
+                        dot.classList.add('bg-yellow-400', 'text-black');
+                        dot.classList.remove('bg-zinc-800', 'text-white');
+                    } else {
+                        dot.classList.remove('bg-yellow-400', 'text-black');
+                        dot.classList.add('bg-zinc-800', 'text-white');
+                    }
+                     });
+
+
+                // 4. Fade In New Step
+                gsap.fromTo(targetStep,
+                    { opacity: 0, x: 20 },
+                    { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }
+                );
+            }
+        });
+    }
+    // Booking Card Reveal on Scroll
+    gsap.from("#booking-card", {
+        scrollTrigger: {
+            trigger: "#booking-system",
+            start: "top 70%",
+        },
+        y: 100,
+        opacity: 0,
+        scale: 0.95,
+        duration: 1.2,
+        ease: "expo.out"
+    });
+    // Handle Form Submit
+    document.getElementById('proBookingForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        gsap.to("#booking-card", {
+            scale: 0.9,
+            opacity: 0,
+            duration: 0.5,
+            onComplete: () => {
+                document.getElementById('booking-card').innerHTML = `
+                    <div class="text-center py-20">
+                        <div class="text-6xl mb-6">🏁</div>
+                        <h2 class="heading-font text-4xl text-yellow-400">YOU'RE ON THE LIST</h2>
+                        <p class="mt-4 text-gray-400">See you in the pit lane soon.</p>
+                    </div>
+                `;
+                gsap.to("#booking-card", { scale: 1, opacity: 1, duration: 0.8 });
+            }
+        });
+    });
+</script>
+<style>
+    /* Styling for the Date/Time picker in dark mode */
+    .invert-calendar::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
+    }
+</style>
+  <section class="bg-zinc-900 py-20 overflow-hidden">
+        <div class="flex gap-10 px-10" id="horizontal-scroll">
+            <div class="min-w-[400px] h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover">
+            </div>
+            <div class="min-w-[400px] h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+                <img src="xsr.jpg" class="w-full h-full object-cover">
+            </div>
+            <div class="min-w-[400px] h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover">
+                 </div>
+            <div class="min-w-[600px] flex flex-col justify-center">
+                <h2 class="heading-font text-5xl">GALLERY<br><span class="text-yellow-400">OF SPEED</span></h2>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="h-screen flex items-center justify-center text-center">
+        <h2 class="heading-font text-[15vw] opacity-10" id="footer-text">BIKEMASTER</h2>
+    </footer>
+
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+
+        // 1. Text Split Animation
+        const title = document.getElementById('split-text');
+        const text = title.innerText;
+        title.innerHTML = text.split('').map(char => `<span class="char">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
+
+
+        gsap.to(".char", {
+            y: 0,
+            opacity: 1,
+            stagger: 0.05,
+            duration: 1,
+            ease: "back.out(1.7)",
+            delay: 0.5
+        });
+  gsap.to("#title-line", { width: "100px", duration: 1.5, delay: 1, ease: "power4.out" });
+
+
+        // 2. Scroll Progress
+        gsap.to("#progress-bar", {
+            width: "100%",
+            scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 0.3
+            }
+        });
+ // 3. 3D Tilt Effect
+        const cards = document.querySelectorAll('.tilt-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+               
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+               
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                    gsap.to(card, {
+                    rotateX: rotateX,
+                    rotateY: rotateY,
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            });
+           
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.5 });
+            });
+        });
+          // 4. Horizontal Scroll (Scrubbing)
+        gsap.to("#horizontal-scroll", {
+            xPercent: -60,
+            scrollTrigger: {
+                trigger: "#horizontal-scroll",
+                start: "top 80%",
+                end: "bottom 20%",
+                scrub: 1
+            }
+        });
+           // 5. Parallax Footer Text
+        gsap.from("#footer-text", {
+            scale: 0.5,
+            opacity: 0,
+            scrollTrigger: {
+                trigger: "footer",
+                start: "top bottom",
+                end: "bottom bottom",
+                scrub: true
+            }
+        });
+    </script>
+</body>
+</html>
